@@ -37,7 +37,7 @@
 - **`inRange()`:** Checks if a value falls within a specified range.
 
 #### Overall Purpose
-- The sketch is designed for sensor data processing, employing various combining techniques for robust communication, and providing visual feedback through an LED.
+- The sketch is designed for sensor data processing, employing various combining techniques for robust communication.
 - It likely serves as part of a larger system for data transmission or control in an embedded environment like Arduino.
 - Modifications can be made to tailor the code to specific application requirements.
 - **Application Context:** Designed for robust sensor data processing and communication in an Arduino environment.
