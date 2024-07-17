@@ -64,7 +64,8 @@ Serial.begin(115200);
 
 void loop() {
 
-DiversityGainEngineInit();
+DiversityGainEngineInit(); //for receiving packets
+// BEE();  // for transmitting the dataframe 
 
 }
 
