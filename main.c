@@ -36,7 +36,7 @@ uint8_t countB0=0;
 int input=0;
 int cntR1_1=0,cntR2_1=0,cntR3_1=0;
 int cntR1_0=0,cntR2_0=0,cntR3_0=0;
-int BestRx=0; int bit_data[4]; char SyncBytes[2];
+int BestRx=0; int bit_data[4]; char SyncBytes[2];uint8_t syncByte;
 
 void DiversityGainEngineInit();
 uint16_t ThresholdVoltageEstimator(uint16_t v1, uint16_t v2, uint16_t v3);
@@ -133,14 +133,18 @@ void CombiningTEchniqueSelection() {
   else if (CT_ID_SC > CT_ID_EGC && CT_ID_SC > CT_ID_MLC) {SC_machine();}
 }
 
+
 void EGC_machine()
 {   
     for (uint8_t k = 0; k < 2; k++) {
+      for (uint8_t j = 0; j < BITLENGTH; j++) {
      v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
     v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
     v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
-    SyncBytes[k]=EGC_Engine(v_R1, v_R2, v_R3, LOW, j);}
-    
+     delayMicroseconds(1000);
+    SyncByte=EGC_Engine(v_R1, v_R2, v_R3, LOW, j);
+      SyncBytes[k]=syncByte}}
+    if (SyncBytes[0] == HB && SyncBytes[1]==SB) {
     v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
     v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
     v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
@@ -201,11 +205,20 @@ void EGC_machine()
         writeByte(RecPacket + diff_rec); // Transmit one byte
         writeByte(EB);
       }
-    }
+    }}
 }
 
 void MLC_machine()
-{
+{    
+    for (uint8_t k = 0; k < 2; k++) {
+      for (uint8_t j = 0; j < BITLENGTH; j++) {
+     v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
+    v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
+    v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
+     delayMicroseconds(1000);
+    SyncByte=MLC_Engine(v_R1, v_R2, v_R3, LOW, j);
+      SyncBytes[k]=syncByte}}
+    if (SyncBytes[0] == HB && SyncBytes[1]==SB) {
     v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
     v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
     v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
@@ -265,7 +278,7 @@ void MLC_machine()
         writeByte(RecPacket + diff_rec); // Transmit one byte
         writeByte(EB);
       }
-    } 
+    } }
 }
 
 void SC_machine(){
