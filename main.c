@@ -282,6 +282,16 @@ void MLC_machine()
 }
 
 void SC_machine(){
+      for (uint8_t k = 0; k < 2; k++) {
+      for (uint8_t j = 0; j < BITLENGTH; j++) {
+     v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
+    v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
+    v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
+     delayMicroseconds(1000);
+     v_R=best_SC_Rx(v_R1, v_R2, v_R3);
+    SyncByte=SC_EngineReception(v_R, j);
+      SyncBytes[k]=syncByte}}
+    if (SyncBytes[0] == HB && SyncBytes[1]==SB) {
     v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
     v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
     v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
@@ -349,7 +359,7 @@ void SC_machine(){
         writeByte(RecPacket + diff_rec); // Transmit one byte
         writeByte(EB);
       }
-    }
+    }}
 }
 
 uint8_t best_SC_Rx(uint16_t v_R1, uint16_t v_R2, uint16_t v_R3)
