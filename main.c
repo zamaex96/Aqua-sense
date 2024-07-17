@@ -14,7 +14,7 @@
 #define HB 255
 #define SB 180
 #define EP 255
-#define SB 00
+#define EB 00
 
 uint16_t v_R1=0;
 uint16_t v_R2=0;
@@ -36,7 +36,7 @@ uint8_t countB0=0;
 int input=0;
 int cntR1_1=0,cntR2_1=0,cntR3_1=0;
 int cntR1_0=0,cntR2_0=0,cntR3_0=0;
-int BestRx=0; int bit_data[4];
+int BestRx=0; int bit_data[4]; char SyncBytes[2];
 
 void DiversityGainEngineInit();
 uint16_t ThresholdVoltageEstimator(uint16_t v1, uint16_t v2, uint16_t v3);
@@ -76,14 +76,21 @@ OldTemp = HTS.readTemperature();
 NewTemp = HTS.readTemperature();
 DiffTemp = OldTemp- NewTemp;
 ++count;
- writeByte(HB);writeByte(SB); writeByte(NewTemp);writeByte(SB);Serial.println(NewTemp);
+ writeByte(EP);writeByte(EP);writeByte(HB);writeByte(SB); writeByte(NewTemp);writeByte(EB);Serial.println(NewTemp);
 if ((chk=inRange(low,high,DiffTemp))== 1)
         {
-          writeByte(HB);writeByte(SB); digitalWrite(LED,HIGH);delayMicroseconds(1000);PulseMapping(DiffTemp);writeByte(SB);Serial.println(DiffTemp);
+         // writeByte(HB);writeByte(SB); 
+         digitalWrite(LED,HIGH);delayMicroseconds(1000);
+         PulseMapping(DiffTemp);
+         writeByte(EB);
+         Serial.println(DiffTemp);
           }
  else 
  {
-  writeByte(HB);writeByte(SB); digitalWrite(LED,LOW);delayMicroseconds(1000); writeByte(NewTemp);writeByte(SB);Serial.println(NewTemp);
+ // writeByte(HB);writeByte(SB); 
+  digitalWrite(LED,LOW);delayMicroseconds(1000); 
+  writeByte(NewTemp);
+  writeByte(EB);Serial.println(NewTemp);
   }
   
  }
@@ -127,31 +134,39 @@ void CombiningTEchniqueSelection() {
 }
 
 void EGC_machine()
-{
-  v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
+{   
+    for (uint8_t k = 0; k < 2; k++) {
+     v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
     v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
     v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
+    SyncBytes[k]=EGC_Engine(v_R1, v_R2, v_R3, LOW, j);}
+    
+    v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
+    v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
+    v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
+    delayMicroseconds(1000);
     ComMode = EGC_Engine_1bit(v_R1, v_R2, v_R3);
     if (ComMode == 0) {
       for (uint8_t j = 0; j < BITLENGTH; j++) {
         v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
         v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
         v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
-        uint8_t RecPacket = EGC_Engine(v_R1, v_R2, v_R3, LOW, j);
+        uint8_t RecPacket = EGC_Engine(v_R1, v_R2, v_R3, LOW, j);}
         input = 0;
-        writeByte(HB);
+        writeByte(EP);
+        writeByte(EP); 
+       writeByte(HB);
         writeByte(SB);
-        writeByte(EP);
-        writeByte(EP);
         writeByte(RecPacket); // Transmit one byte
-        writeByte(SB);
-      }
+        writeByte(EB);
+      
     } 
     else if (ComMode == 1) {
       for (uint8_t j = 0; j < 4; j++) {
         v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
         v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
         v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
+        delayMicroseconds(1000);
         bit_data[j] = EGC_Engine_1bit(v_R1, v_R2, v_R3);
       }
       if (bit_data[0] == 1 && bit_data[1] == 0) {
@@ -172,19 +187,19 @@ void EGC_machine()
         diff_rec = 4;
       }
       if (integer == +1) {
-        writeByte(HB);
-        writeByte(SB);
-        writeByte(EP);
-        writeByte(EP);
+       writeByte(EP);
+       writeByte(EP);
+       writeByte(HB);
+       writeByte(SB);
         writeByte(RecPacket - diff_rec); // Transmit one byte
-        writeByte(SB);
+        writeByte(EB);
       } else if (integer == -1) {
-        writeByte(HB);
+        writeByte(EP);
+        writeByte(EP); 
+       writeByte(HB);
         writeByte(SB);
-        writeByte(EP);
-        writeByte(EP);
         writeByte(RecPacket + diff_rec); // Transmit one byte
-        writeByte(SB);
+        writeByte(EB);
       }
     }
 }
@@ -194,26 +209,28 @@ void MLC_machine()
     v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
     v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
     v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
+     delayMicroseconds(1000);
     ComMode = MLC_Engine_1bit(v_R1, v_R2, v_R3);
     if (ComMode == 0) {
       for (uint8_t j = 0; j < BITLENGTH; j++) {
         v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
         v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
         v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
-        uint8_t RecPacket = MLC_Engine(v_R1, v_R2, v_R3, LOW, j);
+        uint8_t RecPacket = MLC_Engine(v_R1, v_R2, v_R3, LOW, j);}
         input = 0;
-        writeByte(HB);
+       writeByte(EP);
+       writeByte(EP); 
+       writeByte(HB);
         writeByte(SB);
-        writeByte(EP);
-        writeByte(EP);
         writeByte(RecPacket); // Transmit one byte
-        writeByte(SB);
-      }
+        writeByte(EB);
+      
     } else if (ComMode == 1) {
       for (uint8_t j = 0; j < 4; j++) {
         v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
         v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
         v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
+         delayMicroseconds(1000);
         bit_data[j] = MLC_Engine_1bit(v_R1, v_R2, v_R3);
       }
       if (bit_data[0] == 1 && bit_data[1] == 0) {
@@ -234,19 +251,19 @@ void MLC_machine()
         diff_rec = 4;
       }
       if (integer == +1) {
+        writeByte(EP);
+        writeByte(EP);
         writeByte(HB);
         writeByte(SB);
-        writeByte(EP);
-        writeByte(EP);
         writeByte(RecPacket - diff_rec); // Transmit one byte
-        writeByte(SB);
+        writeByte(EB);
       } else if (integer == -1) {
+        writeByte(EP);
+        writeByte(EP);
         writeByte(HB);
         writeByte(SB);
-        writeByte(EP);
-        writeByte(EP);
         writeByte(RecPacket + diff_rec); // Transmit one byte
-        writeByte(SB);
+        writeByte(EB);
       }
     } 
 }
@@ -255,6 +272,7 @@ void SC_machine(){
     v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
     v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
     v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
+    delayMicroseconds(1000);
     v_R=best_SC_Rx(v_R1, v_R2, v_R3);
     ComMode = SC_Engine_1bit(v_R);
     if (ComMode == 0) {
@@ -262,22 +280,24 @@ void SC_machine(){
         v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
         v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
         v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
+        delayMicroseconds(1000);
         v_R=best_SC_Rx(v_R1, v_R2, v_R3);
-        uint8_t RecPacket = SC_EngineReception(v_R, j);
+        uint8_t RecPacket = SC_EngineReception(v_R, j);}
         input = 0;
+         writeByte(EP);
+        writeByte(EP);
         writeByte(HB);
         writeByte(SB);
-        writeByte(EP);
-        writeByte(EP);
         writeByte(RecPacket); // Transmit one byte
-        writeByte(SB);
-      }
+        writeByte(EB);
+      
     }
     if (ComMode == 1) {
       for (uint8_t j = 0; j < 4; j++) {
         v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
         v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
         v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
+       delayMicroseconds(1000);
        v_R=best_SC_Rx(v_R1, v_R2, v_R3);
         bit_data[j] = SC_Engine_1bit(v_R);
       }
@@ -302,19 +322,19 @@ void SC_machine(){
         break;
         }
       if (integer == +1) {
-        writeByte(HB);
+       writeByte(EP);
+        writeByte(EP); 
+       writeByte(HB);
         writeByte(SB);
-        writeByte(EP);
-        writeByte(EP);
         writeByte(RecPacket - diff_rec); // Transmit one byte
-        writeByte(SB);
+        writeByte(EB);
       } else if (integer == -1) {
-        writeByte(HB);
+       writeByte(EP);
+        writeByte(EP); 
+       writeByte(HB);
         writeByte(SB);
-        writeByte(EP);
-        writeByte(EP);
         writeByte(RecPacket + diff_rec); // Transmit one byte
-        writeByte(SB);
+        writeByte(EB);
       }
     }
 }
