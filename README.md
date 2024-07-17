@@ -40,6 +40,6 @@
 - The sketch is designed for sensor data processing, employing various combining techniques for robust communication.
 - It likely serves as part of a larger system for data transmission or control in an embedded environment like Arduino.
 - Modifications can be made to tailor the code to specific application requirements.
-- **Application Context:** Designed for robust sensor data processing and communication in an Arduino environment.
+- **Application Context:** Designed for robust sensor data processing and communication in an Arduino, stm32 or any other environment.
 - **Functionality:** Implements diverse combining techniques (EGC, MLC, SC) to ensure reliable data transmission or control.
 - **Feedback:** Provides visual feedback through an LED to indicate transmission status based on temperature data.
