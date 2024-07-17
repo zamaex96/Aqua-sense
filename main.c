@@ -142,7 +142,7 @@ void EGC_machine()
     v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
     v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
      delayMicroseconds(1000);
-    SyncByte=EGC_Engine(v_R1, v_R2, v_R3, LOW, j);
+    syncByte=EGC_Engine(v_R1, v_R2, v_R3, LOW, j);
       SyncBytes[k]=syncByte}}
     if (SyncBytes[0] == HB && SyncBytes[1]==SB) {
     v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
@@ -216,7 +216,7 @@ void MLC_machine()
     v_R2 = analogRead(sensorPin2); // Read the sensor2 Value
     v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
      delayMicroseconds(1000);
-    SyncByte=MLC_Engine(v_R1, v_R2, v_R3, LOW, j);
+    syncByte=MLC_Engine(v_R1, v_R2, v_R3, LOW, j);
       SyncBytes[k]=syncByte}}
     if (SyncBytes[0] == HB && SyncBytes[1]==SB) {
     v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
@@ -289,7 +289,7 @@ void SC_machine(){
     v_R3 = analogRead(sensorPin3); // Read the sensor3 Value
      delayMicroseconds(1000);
      v_R=best_SC_Rx(v_R1, v_R2, v_R3);
-    SyncByte=SC_EngineReception(v_R, j);
+    syncByte=SC_EngineReception(v_R, j);
       SyncBytes[k]=syncByte}}
     if (SyncBytes[0] == HB && SyncBytes[1]==SB) {
     v_R1 = analogRead(sensorPin1); // Read the sensor1 Value
