@@ -53,6 +53,8 @@ float OldTemp, NewTemp, DiffTemp;
 int chk=0;
  float low=-4.0, high=4.0;
 
+ int bs=0, be=0,pdc=0; int num=0;
+
 void setup() {
 Serial.begin(115200);
 
@@ -518,10 +520,17 @@ else if(Tempdata==4||Tempdata==-4){digitalWrite(LED,LOW);delayMicroseconds(1000)
 Tempdata=0;
 }
 
-void PSR_calculate(char packet, int num)        
+void PSR_calculate(char packet)        
 {  
- int pdc;
- if (packet == EP) pdc++;
- if (num>=20000){Serial.print("PSR/PDR");Serial.println(pdc/20000);Serial.print("PFR");Serial.println((20000-pdc)/20000);pdc=0}
+ if (packet == EP) {pdc++;num++}
+ if (num>=20000){Serial.print("PSR/PDR");Serial.println(pdc/20000);Serial.print("PFR");Serial.println((20000-pdc)/20000);pdc=0;num=0}
+        
+}
+
+void BER_calculate(int bit)        
+{  
+ if (bit == 1) {bs++;num++}
+ else if (bit!=1){be++;num++}
+ if (num >= 20000){Serial.print("BER");Serial.println(be/20000);be=0;num=0}
         
 }
