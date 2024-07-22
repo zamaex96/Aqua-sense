@@ -517,3 +517,11 @@ else if(Tempdata==3||Tempdata==-3){digitalWrite(LED,HIGH);delayMicroseconds(1000
 else if(Tempdata==4||Tempdata==-4){digitalWrite(LED,LOW);delayMicroseconds(1000);digitalWrite(LED,HIGH);}
 Tempdata=0;
 }
+
+void PSR_calculate(char packet, int num)        
+{  
+ int pdc;
+ if (packet == EP) pdc++;
+ if (num>=20000){Serial.print("PSR/PDR");Serial.println(pdc/20000);Serial.print("PFR");Serial.println((20000-pdc)/20000);pdc=0}
+        
+}
