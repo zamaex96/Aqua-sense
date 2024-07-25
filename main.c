@@ -105,7 +105,18 @@ void DiversityGainEngineInit()
      v_R1=analogRead(sensorPin1);//Read the sensor1 Value
      v_R2=analogRead(sensorPin2);//Read the sensor1 Value
     v_R3=analogRead(sensorPin3);//Read the sensor1 Value
-  
+   //alternatively for stm32 platform 
+   // first configure the ADC module 
+  /* while (!convCompleted);
+
+			        for (uint8_t i = 0; i < hadc1.Init.NbrOfConversion; i++)
+			        {
+			            v_R1 = rawValues[0];
+			            v_R2 = rawValues[1];
+			            v_R3 = rawValues[2];
+			        } 
+   */
+   //comment out this section if you are using other platforms
   Th_voltages[j]=ThresholdVoltageEstimator(v_R1,v_R2,v_R3);
   delayMicroseconds(1000);
   }
