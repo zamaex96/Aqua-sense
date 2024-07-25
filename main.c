@@ -492,6 +492,9 @@ void writeByte(char decimal)
  //if (a==1)
  {
  digitalWrite(LED,HIGH);
+     //for stm32, first configure GPIO
+    // Set PA5 high
+    //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 // delayMicroseconds(5);
  //digitalWrite(LED,LOW);
   //analogWrite(A0,255);  
@@ -500,6 +503,9 @@ void writeByte(char decimal)
  else
  {
  digitalWrite(LED,LOW);
+	 //for stm32 
+    // Set PA5 low
+    //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
  //delayMicroseconds(5);
  //digitalWrite(LED,HIGH);
  // analogWrite(A0,0);  
@@ -507,6 +513,8 @@ void writeByte(char decimal)
  }
  //delay(DELAY);
  delayMicroseconds(1000);
+	 // Insert 1000 ms delay
+        //HAL_Delay(1000);
  }
 //Serial.println();
 //digitalWrite(LED,LOW);
