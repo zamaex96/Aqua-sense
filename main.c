@@ -74,8 +74,8 @@ DiversityGainEngineInit(); //for receiving packets
 void BEE()
 {
 int count=0;
-OldTemp = HTS.readTemperature();
-NewTemp = HTS.readTemperature();
+OldTemp = HTS.readTemperature();//read the temperature sensor data
+NewTemp = HTS.readTemperature();// read the sensor data aft an instant 
 DiffTemp = OldTemp- NewTemp;
 ++count;
  writeByte(EP);writeByte(EP);writeByte(HB);writeByte(SB); writeByte(NewTemp);writeByte(EB);Serial.println(NewTemp);
