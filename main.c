@@ -477,7 +477,7 @@ uint8_t SC_Engine_1bit(uint16_t voltage)
      
 }
 
-//Sending 1byte number
+//Sending 1byte number using the digital pin on the mcu 
 void writeByte(char decimal)
 {
 //converting the decimal value to binary and sending 8 bit information from MSB to LSB
@@ -538,14 +538,14 @@ else if(Tempdata==3||Tempdata==-3){digitalWrite(LED,HIGH);delayMicroseconds(1000
 else if(Tempdata==4||Tempdata==-4){digitalWrite(LED,LOW);delayMicroseconds(1000);digitalWrite(LED,HIGH);}
 Tempdata=0;
 }
-
+//function to calculate the packet success rate  
 void PSR_calculate(char packet)        
 {  
  if (packet == EP) {pdc++;num++}
  if (num>=20000){Serial.print("PSR/PDR");Serial.println(pdc/20000);Serial.print("PFR");Serial.println((20000-pdc)/20000);pdc=0;num=0}
         
 }
-
+//function to calculate the bit error rate of the received packet 
 void BER_calculate(int bit)        
 {  
  if (bit == 1) {bs++;num++}
