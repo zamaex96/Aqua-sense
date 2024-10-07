@@ -536,6 +536,7 @@ if(Tempdata==1||Tempdata==-1){digitalWrite(LED,HIGH);delayMicroseconds(1000);dig
 else if(Tempdata==2||Tempdata==-2){digitalWrite(LED,LOW);delayMicroseconds(1000);digitalWrite(LED,LOW);}
 else if(Tempdata==3||Tempdata==-3){digitalWrite(LED,HIGH);delayMicroseconds(1000);digitalWrite(LED,LOW);}
 else if(Tempdata==4||Tempdata==-4){digitalWrite(LED,LOW);delayMicroseconds(1000);digitalWrite(LED,HIGH);}
+else if(Tempdata==0){BEE();}	
 Tempdata=0;
 }
 //function to calculate the packet success rate  
