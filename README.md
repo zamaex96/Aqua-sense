@@ -43,3 +43,10 @@
 - **Application Context:** Designed for robust sensor data processing and communication in an Arduino, stm32 or any other environment.
 - **Functionality:** Implements diverse combining techniques (EGC, MLC, SC) to ensure reliable data transmission or control.
 - **Feedback:** Provides visual feedback through an LED to indicate transmission status based on temperature data.
+
+<div align="center">
+  <a href="https://maazsalman.org/">
+    <img width="50" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg" alt="gh" />
+  </a>
+  <p> Explore More! 🚀</p>
+</div>
